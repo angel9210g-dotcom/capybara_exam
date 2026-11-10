@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#22c8dc" />
+    <meta name="description" content="卡皮九九島：適合 PC 與 iPad 的九九乘法打地鼠遊戲。" />
+    <title>卡皮九九島</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main id="app" class="app-shell">
+      <section id="map-screen" class="screen map-screen is-active" aria-labelledby="game-title">
+        <header class="map-header">
+          <div>
+            <p class="eyebrow">九九乘法大冒險</p>
+            <h1 id="game-title">卡皮九九島</h1>
+          </div>
+          <button id="sound-toggle" class="icon-button" type="button" aria-label="關閉音效" aria-pressed="true">
+            <span aria-hidden="true">🔊</span>
+          </button>
+        </header>
+
+        <div class="map-card" aria-label="關卡地圖">
+          <img src="./assets/world-map.png" alt="有花園、瀑布、竹林、溫泉與燈籠廣場的卡皮九九島" />
+          <button class="level-node level-1" type="button" data-level="1" aria-label="第一關：花園練習場">
+            <span class="level-number">1</span>
+            <span class="level-name">花園練習場</span>
+          </button>
+          <button class="level-node level-2 is-locked" type="button" data-level="2" disabled aria-label="第二關尚未開放">
+            <span class="level-number">🔒</span>
+            <span class="level-name">瀑布河谷</span>
+          </button>
+          <button class="level-node level-3 is-locked" type="button" data-level="3" disabled aria-label="第三關尚未開放">
+            <span class="level-number">🔒</span>
+            <span class="level-name">竹林迷陣</span>
+          </button>
+          <button class="level-node level-4 is-locked" type="button" data-level="4" disabled aria-label="第四關尚未開放">
+            <span class="level-number">🔒</span>
+            <span class="level-name">溫泉挑戰</span>
+          </button>
+          <button class="level-node level-5 is-locked" type="button" data-level="5" disabled aria-label="第五關尚未開放">
+            <span class="level-number">🔒</span>
+            <span class="level-name">燈籠祭典</span>
+          </button>
+        </div>
+
+        <div class="map-footer">
+          <div class="mission-chip">
+            <span aria-hidden="true">🎯</span>
+            <span><strong>任務：</strong>80 秒內答對 10 題</span>
+          </div>
+          <button id="start-level-button" class="primary-button" type="button">
+            開始第一關
+            <span aria-hidden="true">▶</span>
+          </button>
+        </div>
+      </section>
+
+      <section id="game-screen" class="screen game-screen" aria-label="第一關遊戲畫面">
+        <header class="game-hud">
+          <button id="map-button" class="hud-button" type="button" aria-label="退出關卡回到主地圖">🗺️</button>
+          <div id="timer" class="hud-pill timer-pill" aria-label="剩餘時間"><span aria-hidden="true">⏱</span><strong>80</strong></div>
+          <div id="question" class="question-card" aria-live="polite">7 × 8 = ?</div>
+          <div id="hearts" class="hud-pill hearts-pill" aria-label="剩餘五滴血"></div>
+          <div id="score" class="hud-pill score-pill" aria-label="答對進度"><strong>0/10</strong></div>
+          <button id="game-sound-toggle" class="hud-button" type="button" aria-label="關閉音效">🔊</button>
+        </header>
+
+        <div class="playfield-wrap">
+          <div class="playfield-decoration deco-left" aria-hidden="true">🌷</div>
+          <div class="playfield-decoration deco-right" aria-hidden="true">🎋</div>
+          <div id="feedback" class="feedback" aria-live="assertive"></div>
+          <div id="holes-grid" class="holes-grid" aria-label="九個卡皮巴拉洞口"></div>
+        </div>
+
+        <div id="hammer" class="hammer" aria-hidden="true">
+          <img src="./assets/mallet.png" alt="" />
+        </div>
+      </section>
+    </main>
+
+    <div id="tutorial" class="modal-layer" role="dialog" aria-modal="true" aria-labelledby="tutorial-title" hidden>
+      <div class="tutorial-card">
+        <div class="teacher-panel">
+          <img src="./assets/teacher.png" alt="戴著藍綠色眼鏡、拿著教學棒的卡皮老師" />
+        </div>
+        <div class="dialog-panel">
+          <p class="dialog-speaker">卡皮老師</p>
+          <h2 id="tutorial-title">歡迎來到花園練習場！</h2>
+          <p id="tutorial-copy">先看畫面上方的乘法題目，再敲下拿著正確答案的卡皮巴拉。</p>
+          <div id="tutorial-dots" class="dialog-dots" aria-label="教學進度"></div>
+          <div class="dialog-actions">
+            <button id="skip-tutorial" class="text-button" type="button">跳過說明</button>
+            <button id="next-tutorial" class="primary-button compact" type="button">下一步</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="countdown" class="countdown-layer" aria-live="assertive" hidden>
+      <div id="countdown-number" class="countdown-number">3</div>
+    </div>
+
+    <div id="result" class="modal-layer" role="dialog" aria-modal="true" aria-labelledby="result-title" hidden>
+      <div class="result-card">
+        <div id="result-icon" class="result-icon" aria-hidden="true">🏆</div>
+        <p class="eyebrow">本次挑戰</p>
+        <h2 id="result-title">成功過關！</h2>
+        <p id="result-copy">你在時間內完成了 10 題。</p>
+        <div id="result-stats" class="result-stats"></div>
+        <div class="result-actions">
+          <button id="retry-button" class="secondary-button" type="button">再玩一次</button>
+          <button id="result-map-button" class="primary-button compact" type="button">回主地圖</button>
+        </div>
+      </div>
+    </div>
+
+    <audio id="background-music" src="./sound/Last_Second_Gambit.mp3" preload="auto" loop></audio>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
